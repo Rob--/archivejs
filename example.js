@@ -1,46 +1,33 @@
 const Archive = require('./index');
 
-const archive = new Archive('http://reddit.com/', {
+const archive = new Archive('https://jwt.io/', {
   threads: 4, // number of parallel workers scraping
   path: __dirname, // root directory of where the archives should be downloaded to
-  requestDelay: 1000, // the delay between when a request has finished and when the next one should be made
+  requestDelay: 100, // the delay between when a request has finished and when the next one should be made
 });
 
-archive.on('scrape', (data) => {
-  console.log(data);
+archive.on('scrape', (url) => {
+  console.log(url);
   /*
-   { message: 'starting to scrape website',
-   url: 'http://reddit.com/' }
-
-   { message: 'scraping link', url: 'http://reddit.com/' }
-
-   { message: 'scraping link',
-   url: 'http://reddit.com//r/thewalkingdead/comments/6jtpuo/i_love_when_the_show_does_throwbacks_to_an/' }
-
-   { message: 'scraping link',
-   url: 'http://reddit.com//advertising' }
+   http://reddit.com/
+   http://reddit.com/
+   http://reddit.com//r/thewalkingdead/comments/6jtpuo/i_love_when_the_show_does_throwbacks_to_an/
+   http://reddit.com//advertising
    */
 });
 
-archive.on('link', (data) => {
-  console.log(data);
+archive.on('link', (url) => {
+  console.log(url);
   /*
-   { message: 'new link found to scrape',
-   url: 'http://reddit.com//static/opensearch.xml' }
-
-   { message: 'new link found to scrape',
-   url: 'http://reddit.com//' }
-
-   { message: 'new link found to scrape',
-   url: 'http://reddit.com//password' }
-
-   { message: 'new link found to scrape',
-   url: 'http://reddit.com//gold' }
+   http://reddit.com//static/opensearch.xml
+   http://reddit.com//
+   http://reddit.com//password
+   http://reddit.com//gold
    */
 });
 
-archive.on('debug', (data) => {
-  console.log(data);
+archive.on('debug', (message) => {
+  console.log(message);
   /*
    spinning up, starting 4 new scrapers
    created path: C:\Users\rob\archives\reddit.com\

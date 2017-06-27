@@ -57,10 +57,7 @@ class Archive {
   }
 
   start () {
-    this.emitter.emit('scrape', {
-      message: 'starting to scrape website',
-      url: this.url,
-    })
+    this.emitter.emit('scrape', this.url);
 
     // pushes the base url to the scraping queue
     this.links.push(this.url);
@@ -97,7 +94,7 @@ class Archive {
             error: err,
           });
         } else {
-          this.stats.size += body.length / 1024;
+          this.stats.size += body.length;
           this.emitter.emit('saved', {
             fileName: fileName,
             path: path,
@@ -143,10 +140,7 @@ class Archive {
   processLink (link) {
     if (!this.links.includes(link) && !this.stats.scraped.includes(link)) {
       this.links.push(link);
-      this.emitter.emit('link', {
-        message: `new link found to scrape`,
-        url: link,
-      });
+      this.emitter.emit('link', link);
     }
   }
 
@@ -160,10 +154,7 @@ class Archive {
     };
 
     const url = this.links.pop();
-    this.emitter.emit('scrape', {
-      message: 'scraping link',
-      url,
-    });
+    this.emitter.emit('scrape', url);
 
     this.stats.scraped.push(url);
 
@@ -183,7 +174,15 @@ class Archive {
 
       const linkFilter = (index, element) => {
         // get the url from the attribs depending on the element
-        let link = element.name === 'script' ? element.attribs.src : element.attribs.href;
+        let link;
+
+        if (element.name === 'script' || element.name === 'img') {
+          link = element.attribs.src;
+        }
+
+        if (element.name === 'a') {
+          link = element.attribs.href;
+        }
 
         // extract the url we want to request (filtering out id references, queries, etc)
         if (link) link = this.extractLink(link);
@@ -192,7 +191,7 @@ class Archive {
         if (link) this.processLink(link);
       }
 
-      $('link, a, script').each(linkFilter);
+      $('link, a, script, img').each(linkFilter);
 
       // finished scraping, get the next scrape
       // setTimeout(this.scrape, this.requestDelay);

@@ -17,6 +17,44 @@ site.start();
 $ npm install archivejs
 ```
 
+## Example:
+
+This module works by downloading as much of a website as possible. If a
+website existed with the following urls:
+
+`http://example.com`
+
+`http://example.com/image.png`
+
+`http://example.com/docs`
+
+`http://example.com/docs/user.json`
+
+The website would be saved with the following folder structure:
+
+- `example.com`
+  - `image.png.archive`
+  - `docs`
+    - `user.json`
+
+`archives\example.com\`
+
+`archives\example.com\image.png.archive`
+
+`archives\example.com\docs\.archive`
+
+`archives\example.com\docs\user.json.archive`
+
+---
+
+For example, if `reddit.com` was archived, the page requested when
+visiting `reddit.com` would be saved in the folder `reddit.com` with the
+file name `.archive` (or `index.archive`).
+
+The main limitation is that only pages that are linked can be archived.
+Any pages hidden or not referenced to from the main page or subsequent
+scraped pages are not downloaded.
+
 ## Usage
 
 Instantiate the archive class as per the example above (`new Archive(url, options)`).

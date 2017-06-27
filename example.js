@@ -1,6 +1,6 @@
 const Archive = require('./index');
 
-const archive = new Archive('https://jwt.io/', {
+const archive = new Archive('https://reddit.com/', {
   threads: 4, // number of parallel workers scraping
   path: __dirname, // root directory of where the archives should be downloaded to
   requestDelay: 100, // the delay between when a request has finished and when the next one should be made
